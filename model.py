@@ -10,6 +10,9 @@ from math import log
 import numpy as np
 
 URL_PKL_PATH = "data/url_block_map.pkl"
+MODEL_PKL_PATH = "data/trained_model.pkl"
+FEAT_PKL_PATH = "data/features.pkl"
+
 
 def url_to_tokens(url):
     return re.findall(r"[\w']+", url)
@@ -22,6 +25,7 @@ def url_to_ngram(url, n):
 
 def flatmap(f, items):
     return chain.from_iterable(imap(f, items))
+
 
 def url_to_mat(url, features):
     tokens = url_to_tokens(url)
@@ -154,8 +158,8 @@ print clf_acc, clf_pre, clf_rec, clf_f1
 
 # Save model to pickle
 
-with open("data/trained_model.pkl", 'wb') as output:  # Overwrites any existing file.
+with open(MODEL_PKL_PATH, 'wb') as output:  # Overwrites any existing file.
     pickle.dump(clf, output, pickle.HIGHEST_PROTOCOL)
 
-with open("data/features.pkl", 'wb') as output:  # Overwrites any existing file.
+with open(FEAT_PKL_PATH, 'wb') as output:  # Overwrites any existing file.
     pickle.dump(features, output, pickle.HIGHEST_PROTOCOL)

@@ -6,6 +6,7 @@ import pickle
 
 EL_PATH = "easylist/easylist_22-12-18.txt"
 URL_PATH = "data/URLs_to_adblock.csv"
+URL_MAP_PKL_PATH = "data/url_block_map.pkl"
 
 # Load EasyList file
 
@@ -49,6 +50,6 @@ print("Finished!")
 
 # Save mapping to pickle
 
-with open("data/url_block_map.pkl", 'wb') as output:  # Overwrites any existing file.
+with open(URL_MAP_PKL_PATH, 'wb') as output:  # Overwrites any existing file.
     pickle.dump(block_map, output, pickle.HIGHEST_PROTOCOL)
 

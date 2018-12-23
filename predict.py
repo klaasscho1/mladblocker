@@ -3,8 +3,13 @@ import re
 import numpy as np
 import sys
 
+CLF_PKL_PATH = "data/trained_model.pkl"
+FEAT_PKL_PATH = "data/features.pkl"
+
+
 def url_to_tokens(url):
     return re.findall(r"[\w']+", url)
+
 
 def url_to_mat(url, features):
     tokens = url_to_tokens(url)
@@ -16,8 +21,6 @@ def url_to_mat(url, features):
 
     return [fMat]
 
-CLF_PKL_PATH = "data/trained_model.pkl"
-FEAT_PKL_PATH = "data/features.pkl"
 
 clf = pickle.load(open(CLF_PKL_PATH, "rb"))
 features = pickle.load(open(FEAT_PKL_PATH, "rb"))
