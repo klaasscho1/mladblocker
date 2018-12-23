@@ -9,6 +9,7 @@ from sklearn import naive_bayes, metrics
 from math import log
 import numpy as np
 
+URL_PKL_PATH = "data/url_block_map.pkl"
 
 def url_to_tokens(url):
     return re.findall(r"[\w']+", url)
@@ -21,6 +22,16 @@ def url_to_ngram(url, n):
 
 def flatmap(f, items):
     return chain.from_iterable(imap(f, items))
+
+def url_to_mat(url, features):
+    tokens = url_to_tokens(url)
+    fMat = np.zeros(len(features))
+
+    for token in tokens:
+        if token in features:
+            fMat[features[token]] += 1
+
+    return fMat
 
 
 def create_mat(urls, features):
@@ -62,7 +73,7 @@ def tfidf_td(urls, url, token):
 
 # Load data from pickle
 
-block_url_map = pickle.load( open( "url_block_map.pkl", "rb"))
+block_url_map = pickle.load(open(URL_PKL_PATH, "rb"))
 
 to_block = []
 to_pass = []
@@ -78,7 +89,7 @@ for (url, block) in block_url_map.most_common():
 
 random.shuffle(to_pass)
 
-to_pass = to_pass[0:10000]
+to_pass = to_pass[0:1000]
 
 
 # Train/test split
@@ -97,6 +108,7 @@ test_docs = {
     "pass": pass_test
 }
 
+print test_docs["block"]
 
 # Create features using TF-IDF
 
@@ -139,3 +151,11 @@ clf_rec = metrics.recall_score(predicted, goldStandard)
 clf_f1 = metrics.f1_score(predicted, goldStandard)
 
 print clf_acc, clf_pre, clf_rec, clf_f1
+
+# Save model to pickle
+
+with open("data/trained_model.pkl", 'wb') as output:  # Overwrites any existing file.
+    pickle.dump(clf, output, pickle.HIGHEST_PROTOCOL)
+
+with open("data/features.pkl", 'wb') as output:  # Overwrites any existing file.
+    pickle.dump(features, output, pickle.HIGHEST_PROTOCOL)
